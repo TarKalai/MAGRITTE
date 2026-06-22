@@ -11,10 +11,9 @@ __pycache__/
 .claude/
 local/
 
-# --- off-the-shelf libraries (template: lib/ is ignored)  ---
-# ...except the vendored april subset required to regenerate the dataset:
-lib/*
-!lib/april/
+# --- off-the-shelf libraries (template: lib/ is ignored) ---
+# april is only needed for the OPTIONAL dataset regeneration; obtain it separately (see README).
+lib/
 
 # --- raw event logs: public BPIC datasets, multi-hundred-MB (download separately, see README) ---
 data/raw/*

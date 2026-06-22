@@ -21,7 +21,7 @@ Organised after the [VerbekeLab project template](https://github.com/VerbekeLab/
 ├── data/
 │   ├── raw/         original BPIC .xes logs (not committed — download separately)
 │   └── processed/   bpic_2012_signature.parquet (the shipped benchmark)
-├── lib/april/   vendored subset of the april library (EventLog/Event only)
+├── lib/         off-the-shelf code (git-ignored); place the april subset here to regenerate data
 ├── notebooks/   per-model analysis + the dataset-generation notebook
 ├── res/         results / outputs
 ├── scripts/     executable entry points
@@ -43,8 +43,10 @@ Organised after the [VerbekeLab project template](https://github.com/VerbekeLab/
 | `scripts/regenerate_signature_dataset.py` | Canonical generator of the benchmark dataset. |
 | `notebooks/Signature Fraud - BPIC 2012.ipynb` | Documented, step-by-step version of the generator. |
 | `notebooks/main_{gine,lstm,transformer}_bpic2012.ipynb` | Per-model analysis (incl. progressive-prefix / earliness). |
-| `lib/april/` | Vendored subset of the [april](https://github.com/tnolle/binet) library (only `EventLog`/`Event` are used). See `lib/april/LICENSE`. |
 | `data/processed/bpic_2012_signature.parquet` | The generated benchmark (shipped so results reproduce without the raw XES). |
+
+> `lib/` is **git-ignored** (off-the-shelf code is not redistributed). It is only needed for the
+> *optional* dataset regeneration — see step 1 below.
 
 The raw BPIC `.xes` logs are **not** committed (they are hundreds of MB and publicly available — see below).
 
@@ -72,9 +74,14 @@ uv pip install torch_geometric==2.8.0
 
 The benchmark parquet is already included, so you can skip straight to running the comparison.
 
-**1. (Optional) Regenerate the benchmark dataset.** Download the BPI Challenge 2012 log
-(`BPI_Challenge_2012.xes`) from [4TU.ResearchData](https://data.4tu.nl/) (search "BPI Challenge
-2012"), place it at `data/raw/BPI_Challenge_2012.xes`, then:
+**1. (Optional) Regenerate the benchmark dataset.** This step needs two things that are **not**
+shipped with the repo:
+- the raw log: download `BPI_Challenge_2012.xes` from [4TU.ResearchData](https://data.4tu.nl/)
+  (search "BPI Challenge 2012") and place it at `data/raw/BPI_Challenge_2012.xes`;
+- the [april](https://github.com/tnolle/binet) library's `processmining` subset (only
+  `EventLog`/`Event`), placed at `lib/april/` (the loader expects `lib/april/processmining/...`).
+
+Then:
 
 ```bash
 uv run python scripts/regenerate_signature_dataset.py
