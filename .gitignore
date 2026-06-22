@@ -1,5 +1,27 @@
-./assets
-./data/*
-.claude
-.venv
-__pycache__
+# --- Python / environment ---
+.venv/
+__pycache__/
+**/__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# --- editor / tooling / scratch ---
+.idea/
+.vscode/
+.claude/
+local/
+
+# --- off-the-shelf libraries (template: lib/ is ignored)  ---
+# ...except the vendored april subset required to regenerate the dataset:
+lib/*
+!lib/april/
+
+# --- raw event logs: public BPIC datasets, multi-hundred-MB (download separately, see README) ---
+data/raw/*
+!data/raw/.gitkeep
+
+# --- derived / exploratory data NOT needed for the paper ---
+data/save/
+data/processed/*
+# ...except the published benchmark used by compare_models.py and the notebooks:
+!data/processed/bpic_2012_signature.parquet
