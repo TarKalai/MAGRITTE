@@ -1,8 +1,8 @@
 """Structural behavioural-signature fraud for BPIC 2012. The signature is a RARE CONSECUTIVE TRANSITION
 between two COMMON activities (a 'forbidden edge' / back-loop a->b->a) injected with a probability that
-escalates toward the surrogate transaction. Because both activities are common, *presence* is not a tell;
-only models that capture ORDER / transitions / paths can detect it -> exercises GINE's inductive bias and
-mirrors real fraud (abnormal navigation paths). Class overlap keeps peak detectability non-trivial."""
+escalates toward the surrogate transaction. Insertion positions are random, so a few fraud traces receive 
+no motif and others receive it several times. Mirrors real fraud (abnormal navigation paths). Class overlap
+keeps peak detectability non-trivial."""
 import sys, types
 from pathlib import Path
 from collections import Counter
