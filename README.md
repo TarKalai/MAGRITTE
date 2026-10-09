@@ -1,14 +1,12 @@
 # Graph- vs. Sequence-Based Fraud Detection on Process Logs
 
 Comparison of a **GINE** graph neural network against **LSTM** and **Transformer** sequence
-baselines for detecting fraudulent behaviour in event logs, evaluated under a **leakage-free
-nested cross-validation** protocol with **threshold-independent** metrics.
+baselines for detecting fraudulent behaviour in event logs, evaluated under a **nested cross-validation** protocol with **threshold-independent** metrics.
 
-Because real remote-desktop fraud data is private, the public benchmark injects a **consistent
-behavioural signature** into the public **BPI Challenge 2012** log: a rare consecutive
+Because real remote-desktop fraud data is private, the public benchmark injects a synthetic behavioural signature into the public **BPI Challenge 2012** log: a rare consecutive
 transition (a back-loop `a → b → a` between two *common* activities) placed in the prefix
-before a surrogate transaction. Because both endpoints are common activities, the *presence* of
-either is uninformative — only the abnormal *transition / ordering* is discriminative, which is
+before the first transaction. Because both endpoints are common activities, the *presence* of
+either is uninformative, only the abnormal *transition / ordering* is discriminative, which is
 what makes the task a meaningful test of order-aware models. A fraction of legitimate traces
 carry the same motif (class overlap) so the task stays non-trivial.
 
@@ -35,9 +33,9 @@ Organised after the [VerbekeLab project template](https://github.com/VerbekeLab/
 
 | Key file | Purpose |
 |----------|---------|
-| `scripts/compare_models.py` | Thin entry point: leakage-free comparison of GINE / LSTM / Transformer; reports **ROC-AUC** & **PR-AUC** as mean ± std over R runs. |
+| `scripts/compare_models.py` | Thin entry point: comparison of GINE / LSTM / Transformer; reports **ROC-AUC** & **PR-AUC** as mean ± std over R runs. |
 | `src/methods/models.py` | The three model definitions. |
-| `src/methods/nested_cv.py` | Leakage-free nested CV + repeated comparison. |
+| `src/methods/nested_cv.py` | Nested CV + repeated comparison. |
 | `src/data/loaders.py` | Log loading, chain-graph construction, node/edge features, `load_and_prepare`. |
 | `config/experiment.py` | Hyperparameters (data path, CV settings, model dims). |
 | `scripts/regenerate_signature_dataset.py` | Canonical generator of the benchmark dataset. |
@@ -100,7 +98,7 @@ cells (each chdir's to the repo root and loads `data/processed/bpic_2012_signatu
 
 ## Method notes
 
-- **Leakage-free nested CV.** Outer `StratifiedGroupKFold` folds are scored once each; an inner
+- **Nested CV.** Outer `StratifiedGroupKFold` folds are scored once each; an inner
   group split provides the validation set used for early stopping (model selection by validation
   PR-AUC). Splits are grouped by session, so train / validation / test are disjoint and neither
   model selection nor any threshold ever sees the test fold.
@@ -112,7 +110,7 @@ cells (each chdir's to the repo root and loads `data/processed/bpic_2012_signatu
 
 ## Example results (BPI Challenge 2012 signature benchmark)
 
-Leakage-free nested CV, threshold-free metrics, mean ± std over repeated runs:
+Nested CV, threshold-free metrics, mean ± std over repeated runs:
 
 | Model | ROC-AUC | PR-AUC |
 |-------|---------|--------|
@@ -120,16 +118,19 @@ Leakage-free nested CV, threshold-free metrics, mean ± std over repeated runs:
 | LSTM | 0.852 ± 0.011 | 0.210 ± 0.010 |
 | Transformer | 0.875 ± 0.009 | 0.216 ± 0.013 |
 
-The three models are close; GINE holds a small edge on this structural-signature benchmark. (Your
-exact figures will differ slightly run-to-run — see *Run-to-run variance* above.)
+The three models are close.
+
+
 
 ## License
 
-The vendored `april` subset retains its original license (`lib/april/LICENSE`).
+The `april` library (needed only for the optional dataset regeneration) is not redistributed;
+obtain it from https://github.com/tnolle/binet under its own license.
+
 For the rest of the work: 
 MIT License
 
-Copyright (c) <Year> <Name>
+Copyright (c) 2026
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
